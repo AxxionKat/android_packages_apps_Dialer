@@ -44,25 +44,25 @@
     <color name="background_dialer_list_items">#eeeeee</color>
 
     <!-- Background color where keypad digits are displayed -->
-    <color name="background_digits_dialpad">#f2ffffff</color>
+    <color name="background_digits_dialpad">#00000000</color>
 
     <!-- Background color of new dialpad -->
     <color name="background_dialpad">#faeeeeee</color>
 
     <!-- Primary color of dialpad text, including the call button -->
-    <color name="dialpad_primary_text_color">#404040</color>  
+    <color name="dialpad_primary_text_color">#FF0000</color>  
    
    	<!-- Call button color separated from dialpad_primary_text_color, for better theme support -->
-    <color name="dialpad_call_button_color">#22b5e5</color>
+    <color name="dialpad_call_button_color">#FF0000</color>
 
     <!-- Secondary color of dialpad text (used for the letters corresponding to each digit -->
-    <color name="dialpad_secondary_text_color">#888888</color>
+    <color name="dialpad_secondary_text_color">#FF0000</color>
 
     <!-- Call button color separated from dialpad_primary_text_color, for better theme support -->
     <color name="dialpad_call_button_color">#404040</color>
 
     <!-- Background color of action bars -->
-    <color name="actionbar_background_color">#ffffff</color>
+    <color name="actionbar_background_color">#000000</color>
 
     <!-- Color of the 1dp divider that separates favorites -->
     <color name="favorite_contacts_separator_color">#d0d0d0</color>
@@ -70,7 +70,7 @@
     <!-- Background color of the search box -->
     <color name="searchbox_background_color">#ffffff</color>
     <!-- Text color of the search box -->
-    <color name="searchbox_text_color">#FF0000</color>
+    <color name="searchbox_text_color">#000000</color>
 
     <!-- Color of the contact name in favorite tiles -->
     <color name="contact_tile_name_color">#f0f0f0</color>
@@ -94,9 +94,9 @@
     <color name="call_log_primary_background_color">#000000</color>
     <color name="call_log_secondary_text_color">#888888</color>
     <color name="call_log_secondary_background_color">#333333</color>
-    <color name="call_log_header_color">#33b5e5</color>
+    <color name="call_log_header_color">#FF0000</color>
     <color name="call_log_voicemail_status_background_color">#262626</color>
     <color name="call_log_voicemail_status_text_color">#888888</color>
-    <color name="call_log_voicemail_status_action_text_color">#33b5e5</color>
+    <color name="call_log_voicemail_status_action_text_color">#FF0000</color>
     <color name="dialtacts_frame_color">#33999999</color>
 </resources>
