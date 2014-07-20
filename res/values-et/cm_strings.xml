@@ -16,20 +16,5 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="hour">
-    <item quantity="one">%d h</item>
-    <item quantity="other">%d h</item>
-  </plurals>
-  <plurals name="minute">
-    <item quantity="one">%d min</item>
-    <item quantity="other">%d min</item>
-  </plurals>
-  <plurals name="second">
-    <item quantity="one">%d s.</item>
-    <item quantity="other">%d s.</item>
-  </plurals>
-  <plurals name="call">
-    <item quantity="one">%d appel</item>
-    <item quantity="other">%d appels</item>
-  </plurals>
+  <string name="call_log_stats_title">Statistika</string>
 </resources>
