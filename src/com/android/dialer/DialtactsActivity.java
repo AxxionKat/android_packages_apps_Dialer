@@ -318,8 +318,6 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
 
         setContentView(R.layout.dialtacts_activity);
 
-        DialerStats.sendEvent(this, "app_launch", DialtactsActivity.class.getSimpleName());
-
         // Add the favorites fragment, and the dialpad fragment, but only if savedInstanceState
         // is null. Otherwise the fragment manager takes care of recreating these fragments.
         if (savedInstanceState == null) {
@@ -524,7 +522,6 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
                 }
                 break;
             case R.id.voice_search_button:
-                DialerStats.sendEvent(DialtactsActivity.this, "button_event", "voice_clicked");
                 try {
                     startActivityForResult(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH),
                             ACTIVITY_REQUEST_CODE_VOICE_SEARCH);
@@ -576,7 +573,6 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
     }
 
     private void showDialpadFragment(boolean animate) {
-        DialerStats.sendEvent(DialtactsActivity.this, "button_event", "dialer_shown");
         mDialpadFragment.setAdjustTranslationForAnimation(animate);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
         if (animate) {
@@ -1064,7 +1060,6 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
     }
 
     public void allContactsClick(View v) {
-        DialerStats.sendEvent(DialtactsActivity.this, "button_event", "contacts_clicked");
         onShowAllContacts();
     }
 
