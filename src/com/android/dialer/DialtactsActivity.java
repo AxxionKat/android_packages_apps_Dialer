@@ -220,14 +220,6 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
             new OnPhoneNumberPickerActionListener() {
                 @Override
                 public void onPickPhoneNumberAction(Uri dataUri) {
-                    if (mInDialpadSearch) {
-                        DialerStats.sendEvent(DialtactsActivity.this,
-                                DialerStats.Categories.INITIATE_CALL, "call_from_dialpad_search");
-                    } else if (mInRegularSearch) {
-                        DialerStats.sendEvent(DialtactsActivity.this,
-                                DialerStats.Categories.INITIATE_CALL, "call_from_regular_search");
-                    }
-
                     // Specify call-origin so that users will see the previous tab instead of
                     // CallLog screen (search UI will be automatically exited).
                     PhoneNumberInteraction.startInteractionForPhoneCall(
@@ -326,7 +318,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
 
         setContentView(R.layout.dialtacts_activity);
 
-        DialerStats.sendEvent(this, DialerStats.Categories.APP_LAUNCH, DialtactsActivity.class.getSimpleName());
+        DialerStats.sendEvent(this, "app_launch", DialtactsActivity.class.getSimpleName());
 
         // Add the favorites fragment, and the dialpad fragment, but only if savedInstanceState
         // is null. Otherwise the fragment manager takes care of recreating these fragments.
@@ -532,7 +524,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
                 }
                 break;
             case R.id.voice_search_button:
-                DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.BUTTON_EVENT, "voice_clicked");
+                DialerStats.sendEvent(DialtactsActivity.this, "button_event", "voice_clicked");
                 try {
                     startActivityForResult(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH),
                             ACTIVITY_REQUEST_CODE_VOICE_SEARCH);
@@ -584,7 +576,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
     }
 
     private void showDialpadFragment(boolean animate) {
-        DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.BUTTON_EVENT, "dialer_shown");
+        DialerStats.sendEvent(DialtactsActivity.this, "button_event", "dialer_shown");
         mDialpadFragment.setAdjustTranslationForAnimation(animate);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
         if (animate) {
@@ -630,7 +622,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
         mSearchView = (EditText) findViewById(R.id.search_view);
         mSearchView.addTextChangedListener(mPhoneSearchQueryTextListener);
         mSearchView.setHint(getString(R.string.dialer_hint_find_contact));
-        setupEvent(mSearchViewContainer, R.id.search_view, DialerStats.Categories.BUTTON_EVENT, "search_clicked");
+        setupEvent(mSearchViewContainer, R.id.search_view, "button_event", "search_clicked");
 
         prepareVoiceSearchButton();
     }
@@ -886,14 +878,12 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
             new PhoneFavoriteFragment.Listener() {
         @Override
         public void onContactSelected(Uri contactUri) {
-            DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.INITIATE_CALL, "call_from_favorite_tile");
             PhoneNumberInteraction.startInteractionForPhoneCall(
                         DialtactsActivity.this, contactUri, getCallOrigin());
         }
 
         @Override
         public void onCallNumberDirectly(String phoneNumber) {
-            DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.INITIATE_CALL, "call_from_favorite_tile");
             Intent intent = CallUtil.getCallIntent(phoneNumber, getCallOrigin());
             startActivity(intent);
         }
@@ -1074,7 +1064,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
     }
 
     public void allContactsClick(View v) {
-        DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.BUTTON_EVENT, "contacts_clicked");
+        DialerStats.sendEvent(DialtactsActivity.this, "button_event", "contacts_clicked");
         onShowAllContacts();
     }
 
