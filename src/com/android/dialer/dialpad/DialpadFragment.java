@@ -27,6 +27,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -84,12 +85,14 @@ import com.android.dialer.NeededForReflection;
 import com.android.dialer.DialtactsActivity;
 import com.android.dialer.R;
 import com.android.dialer.SpecialCharSequenceMgr;
+import com.android.dialer.cmstats.DialerStats;
 import com.android.internal.telephony.ITelephony;
 import com.android.phone.common.CallLogAsync;
 import com.android.phone.common.HapticFeedback;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.util.HashSet;
+import java.util.Locale;
 
 /**
  * Fragment that displays a twelve-key phone dialpad.
@@ -619,6 +622,11 @@ public class DialpadFragment extends Fragment
     }
 
     private void setupKeypad(View fragmentView) {
+        // make sure keypad is there
+        View oneButton = fragmentView.findViewById(R.id.one);
+        if (oneButton == null)
+            return;
+
         final int[] buttonIds = new int[] {R.id.zero, R.id.one, R.id.two, R.id.three, R.id.four,
                 R.id.five, R.id.six, R.id.seven, R.id.eight, R.id.nine, R.id.star, R.id.pound};
 
@@ -640,7 +648,9 @@ public class DialpadFragment extends Fragment
                 R.string.dialpad_8_2_letters, R.string.dialpad_9_2_letters,
                 R.string.dialpad_star_2_letters, R.string.dialpad_pound_2_letters};
 
-        final Resources resources = getResources();
+        // load the dialpad resources based on the t9 serach input locale
+        Locale t9SearchInputLocale = SmartDialPrefix.getT9SearchInputLocale(getActivity());
+        final Resources resources = getResourcesForLocale(t9SearchInputLocale);
 
         final int pixels = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.DIALKEY_PADDING, 0);
@@ -683,6 +693,12 @@ public class DialpadFragment extends Fragment
         // Long-pressing zero button will enter '+' instead.
         fragmentView.findViewById(R.id.zero).setOnLongClickListener(this);
 
+    }
+
+    public void refreshKeypad() {
+        View fragmentView = getView();
+        if (fragmentView != null)
+            setupKeypad(fragmentView);
     }
 
     @Override
@@ -1179,6 +1195,8 @@ public class DialpadFragment extends Fragment
         if (isDigitsEmpty()) { // No number entered.
             handleDialButtonClickWithEmptyDigits();
         } else {
+            DialerStats.sendEvent(getActivity(), DialerStats.Categories.INITIATE_CALL, "call_from_dialpad_direct");
+
             final String number = mDigits.getText().toString();
 
             // "persist.radio.otaspdial" is a temporary hack needed for one carrier's automated

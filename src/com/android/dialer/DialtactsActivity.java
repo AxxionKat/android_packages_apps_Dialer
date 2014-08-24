@@ -29,12 +29,14 @@ import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.preference.PreferenceManager;
 import android.provider.CallLog.Calls;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Intents;
@@ -86,6 +88,7 @@ import com.android.internal.telephony.ITelephony;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The dialer tab's title is 'phone', a more common name (see strings.xml).
@@ -102,6 +105,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
     public static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
     public static final String SHARED_PREFS_NAME = "com.android.dialer_preferences";
+    private static final String PREF_LAST_T9_LOCALE = "smart_dial_prefix_last_t9_locale";
 
     /** Used to open Call Setting */
     private static final String PHONE_PACKAGE = "com.android.phone";
@@ -216,6 +220,14 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
             new OnPhoneNumberPickerActionListener() {
                 @Override
                 public void onPickPhoneNumberAction(Uri dataUri) {
+                    if (mInDialpadSearch) {
+                        DialerStats.sendEvent(DialtactsActivity.this,
+                                DialerStats.Categories.INITIATE_CALL, "call_from_dialpad_search");
+                    } else if (mInRegularSearch) {
+                        DialerStats.sendEvent(DialtactsActivity.this,
+                                DialerStats.Categories.INITIATE_CALL, "call_from_regular_search");
+                    }
+
                     // Specify call-origin so that users will see the previous tab instead of
                     // CallLog screen (search UI will be automatically exited).
                     PhoneNumberInteraction.startInteractionForPhoneCall(
@@ -314,6 +326,8 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
 
         setContentView(R.layout.dialtacts_activity);
 
+        DialerStats.sendEvent(this, DialerStats.Categories.APP_LAUNCH, DialtactsActivity.class.getSimpleName());
+
         // Add the favorites fragment, and the dialpad fragment, but only if savedInstanceState
         // is null. Otherwise the fragment manager takes care of recreating these fragments.
         if (savedInstanceState == null) {
@@ -359,7 +373,6 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
         hideDialpadFragment(false, false);
 
         mDialerDatabaseHelper = DatabaseHelperManager.getDatabaseHelper(this);
-        SmartDialPrefix.initializeNanpSettings(this);
     }
 
     @Override
@@ -373,7 +386,25 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
         }
         prepareVoiceSearchButton();
         mFirstLaunch = false;
-        mDialerDatabaseHelper.startSmartDialUpdateThread();
+
+        // make this call on resume in case user changed t9 locale in settings
+        SmartDialPrefix.initializeNanpSettings(this);
+
+        // if locale has changed since last time, refresh the smart dial db
+        Locale locale = SmartDialPrefix.getT9SearchInputLocale(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String prevLocale = prefs.getString(PREF_LAST_T9_LOCALE, null);
+
+        if (!TextUtils.equals(locale.toString(), prevLocale)) {
+            mDialerDatabaseHelper.recreateSmartDialDatabaseInBackground();
+            if (mDialpadFragment != null)
+                mDialpadFragment.refreshKeypad();
+
+            prefs.edit().putString(PREF_LAST_T9_LOCALE, locale.toString()).apply();
+        }
+        else {
+            mDialerDatabaseHelper.startSmartDialUpdateThread();
+        }
     }
 
     @Override
@@ -501,6 +532,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
                 }
                 break;
             case R.id.voice_search_button:
+                DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.BUTTON_EVENT, "voice_clicked");
                 try {
                     startActivityForResult(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH),
                             ACTIVITY_REQUEST_CODE_VOICE_SEARCH);
@@ -552,6 +584,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
     }
 
     private void showDialpadFragment(boolean animate) {
+        DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.BUTTON_EVENT, "dialer_shown");
         mDialpadFragment.setAdjustTranslationForAnimation(animate);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
         if (animate) {
@@ -597,6 +630,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
         mSearchView = (EditText) findViewById(R.id.search_view);
         mSearchView.addTextChangedListener(mPhoneSearchQueryTextListener);
         mSearchView.setHint(getString(R.string.dialer_hint_find_contact));
+        setupEvent(mSearchViewContainer, R.id.search_view, DialerStats.Categories.BUTTON_EVENT, "search_clicked");
 
         prepareVoiceSearchButton();
     }
@@ -852,12 +886,14 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
             new PhoneFavoriteFragment.Listener() {
         @Override
         public void onContactSelected(Uri contactUri) {
+            DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.INITIATE_CALL, "call_from_favorite_tile");
             PhoneNumberInteraction.startInteractionForPhoneCall(
                         DialtactsActivity.this, contactUri, getCallOrigin());
         }
 
         @Override
         public void onCallNumberDirectly(String phoneNumber) {
+            DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.INITIATE_CALL, "call_from_favorite_tile");
             Intent intent = CallUtil.getCallIntent(phoneNumber, getCallOrigin());
             startActivity(intent);
         }
@@ -1038,6 +1074,7 @@ public class DialtactsActivity extends TransactionSafeActivity implements View.O
     }
 
     public void allContactsClick(View v) {
+        DialerStats.sendEvent(DialtactsActivity.this, DialerStats.Categories.BUTTON_EVENT, "contacts_clicked");
         onShowAllContacts();
     }
 
