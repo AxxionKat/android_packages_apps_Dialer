@@ -81,10 +81,7 @@ public class SmartDialPrefix {
         languageToSmartDialMap.put("ko", new KoreanSmartDialMap());
         languageToSmartDialMap.put("el", new GreekSmartDialMap());
         languageToSmartDialMap.put("ru", new RussianSmartDialMap());
-        // Per Locale.java documentation:
-        // Note that Java uses several deprecated two-letter codes. The Hebrew ("he") language
-        // code is rewritten as "iw"
-        languageToSmartDialMap.put("iw", new HebrewSmartDialMap());
+        languageToSmartDialMap.put("he", new HebrewSmartDialMap());
         languageToSmartDialMap.put("zh", new ChineseSmartDialMap());
     }
 
