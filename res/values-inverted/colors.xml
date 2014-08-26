@@ -17,20 +17,20 @@
 <resources>
 
     <!-- Secondary text color in the Phone app -->
-    <color name="dialtacts_primary_text_color">#FFFFFF</color>
-    <color name="dialtacts_secondary_text_color">#888888</color>
-    <color name="dialpad_text_color">#FFFFFF</color>
+    <color name="dialtacts_primary_text_color">#e51c23</color>
+    <color name="dialtacts_secondary_text_color">#e84e40</color>
+    <color name="dialpad_text_color">#e51c23</color>
 
     <!-- Background color of dialpad -->
     <color name="background_dialpad">#ff111111</color>
     <!-- Pressed color of dialpad buttons -->
     <color name="background_dialpad_pressed">#ececec</color>
     <!-- Primary color of dialpad text, including the call button -->
-    <color name="dialpad_primary_text_color">#ffffff</color>
+    <color name="dialpad_primary_text_color">#e51c23</color>
     <!-- Secondary color of dialpad text (used for the letters corresponding to each digit -->
-    <color name="dialpad_secondary_text_color">#ffffff</color>
+    <color name="dialpad_secondary_text_color">#e84e40</color>
     <!-- Color of dialpad digits -->
-    <color name="dialpad_digits_text_color">#ffffff</color>
+    <color name="dialpad_digits_text_color">#e51c23</color>
     <!-- Color for dialpad separator lines -->
     <color name="dialpad_separator_line_color">#dadada</color>
 
@@ -61,7 +61,7 @@
 
     <!-- Background color of action bars.  Ensure this stays in sync with packages/Telephony
          actionbar_background_color. -->
-    <color name="actionbar_background_color">#222222</color>
+    <color name="actionbar_background_color">#e84e40</color>
 
     <!-- Underline color of action bars.  Ensure this stays in sync with packages/Telephony
          actionbar_underline. -->
@@ -74,7 +74,7 @@
     <color name="searchbox_background_color">#000000</color>
 
     <!-- Text color of the search box text as entered by user  -->
-    <color name="searchbox_text_color">#ffffff</color>
+    <color name="searchbox_text_color">#e51c23</color>
     <!-- Text color of the search box hint text  -->
     <color name="searchbox_hint_text_color">#aaaaaa</color>
 
@@ -85,7 +85,7 @@
     <color name="undo_dialogue_text_color">#b3b3b3</color>
 
     <!-- Text color for no favorites message -->
-    <color name="nofavorite_text_color">#ffffff</color>
+    <color name="nofavorite_text_color">#e51c23</color>
 
     <!-- Text color for the "Remove" text in its regular state -->
     <color name="remove_text_color">#555555</color>
@@ -94,7 +94,7 @@
     <color name="remove_highlighted_text_color">#FF3F3B</color>
 
     <!-- Text color for the "speed dial" label in the favorites menu. -->
-    <color name="speed_dial_text_color">#ffffff</color>
+    <color name="speed_dial_text_color">#e51c23</color>
 
     <!-- Background color for the "All Contacts" button in the favorites menu. -->
     <color name="all_contacts_button_color">#222222</color>
@@ -106,7 +106,7 @@
     <color name="favorites_menu_background_color">#000000</color>
 
     <!-- Text color for the "All Contacts" button above the favorite callers -->
-    <color name="all_contacts_button_text_color">#ffffff</color>
+    <color name="all_contacts_button_text_color">#e51c23</color>
 
     <!-- Background gradient start color for tabs in an unpressed state. -->
     <color name="tab_background_gradient_start_color">#222222</color>
@@ -130,14 +130,14 @@
     <color name="tab_selected_color">#3b77e7</color>
 
     <!-- Color of tab text. -->
-   <color name="tab_text_color">#ffffff</color>
+   <color name="tab_text_color">#e51c23</color>
 
     <!-- Color of the bottom border below the contacts grid on the main dialer screen. -->
     <color name="contacts_grid_bottom_border_color">#16000000</color>
 
     <!-- Color of action bar text. Ensure this stays in sync with packages/Telephony
          phone_settings_actionbar_text_color-->
-    <color name="actionbar_text_color">#FFFFFF</color>
+    <color name="actionbar_text_color">#e51c23</color>
 
     <!-- Colors for incoming and outgoing calls in the call statistics -->
     <color name="call_stats_incoming">#33b5e5</color>
