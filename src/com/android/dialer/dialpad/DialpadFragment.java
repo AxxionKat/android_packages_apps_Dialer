@@ -834,6 +834,8 @@ public class DialpadFragment extends Fragment
         super.onDestroy();
         mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
 
+    } 
+
     @Override
     public void onPickup() {
         if (!isDigitsEmpty()) {
@@ -845,7 +847,7 @@ public class DialpadFragment extends Fragment
                    (getActivity() instanceof DialtactsActivity ?
                             ((DialtactsActivity) getActivity()).getCallOrigin() : null));
             startActivity(intent);
-            hideAndClearDialpad();
+            hideAndClearDialpad(true);
         }
     }
 
